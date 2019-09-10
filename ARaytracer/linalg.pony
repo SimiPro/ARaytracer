@@ -21,5 +21,40 @@ class Vec3 val
         Vec3(a() / k, b() / k, c() / k)
 
 */  
+type Vec3 is (F32, F32, F32)
+
+primitive Linalg
+    fun val add(a: Vec3 val, b: Vec3 val): Vec3 =>
+        (let x1, let y1, let z1) = a
+        (let x2, let y2, let z2) = b
+        (x1 + x2, y1 + y2, z1 + z2)
     
+    fun val smul(t: F32, a: Vec3 val): Vec3 =>
+        (let x, let y, let z) = a
+        (t*x, t*y, t*z)
+    
+    fun sub(a: Vec3, b: Vec3): Vec3 =>
+        (let x1, let y1, let z1) = a
+        (let x2, let y2, let z2) = b
+        (x1 - x2, y1 - y2, z1 - z2)
+
+    fun mul(a: Vec3, b: Vec3): Vec3 =>
+        (let x1, let y1, let z1) = a
+        (let x2, let y2, let z2) = b
+        (x1 * x2, y1 * y2, z1 * z2)
+    
+    fun div(a: Vec3, b: Vec3): Vec3 =>
+        (let x1, let y1, let z1) = a
+        (let x2, let y2, let z2) = b
+        (x1 / x2, y1 / y2, z1 / z2)
+
+    fun dot(a: Vec3, b: Vec3): F32 =>
+        (let x1, let y1, let z1) = a
+        (let x2, let y2, let z2) = b
+        (x1 *x2)  + (y1 * y2) + (z1 * z2)
+    
+    fun squared_norm(a: Vec3): F32 => dot(a, a)
+    fun norm(a: Vec3): F32 => squared_norm(a).sqrt()
+
+
     
