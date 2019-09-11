@@ -1,5 +1,5 @@
 target := ARaytracer
-config ?= release
+config ?= debug
 
 SRC_DIR ?= $(target)
 BUILD_DIR ?= build/$(config)

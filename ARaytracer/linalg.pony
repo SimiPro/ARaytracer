@@ -32,6 +32,10 @@ primitive Linalg
     fun val smul(t: F32, a: Vec3 val): Vec3 =>
         (let x, let y, let z) = a
         (t*x, t*y, t*z)
+
+    fun val sdiv(a: Vec3 val, k: F32): Vec3 =>
+        (let x, let y, let z) = a
+        (x/k, y/k, z/k)
     
     fun sub(a: Vec3, b: Vec3): Vec3 =>
         (let x1, let y1, let z1) = a
@@ -55,6 +59,7 @@ primitive Linalg
     
     fun squared_norm(a: Vec3): F32 => dot(a, a)
     fun norm(a: Vec3): F32 => squared_norm(a).sqrt()
+    fun normalized(a: Vec3): Vec3 => sdiv(a, norm(a)) 
 
 
     
