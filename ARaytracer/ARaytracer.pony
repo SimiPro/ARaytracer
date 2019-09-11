@@ -15,8 +15,8 @@ actor Main
             match CreateFile(filepath)
             | let f: File => 
                 env.out.print("Position in file: " + f.position().string())
-                let width_x: U32 = 200
-                let height_y: U32 = 100
+                let width_x: U32 = 400
+                let height_y: U32 = 200
 
                 f.print("P3")
                 f.print(width_x.string() + " " + height_y.string())
