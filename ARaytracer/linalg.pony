@@ -22,6 +22,7 @@ class Vec3 val
 
 */  
 type Vec3 is (F32, F32, F32)
+type CoordSystem is (Vec3, Vec3, Vec3)
 
 primitive Linalg
     fun val add(a: Vec3 val, b: Vec3 val): Vec3 =>
@@ -56,10 +57,24 @@ primitive Linalg
         (let x1, let y1, let z1) = a
         (let x2, let y2, let z2) = b
         (x1 *x2)  + (y1 * y2) + (z1 * z2)
+
+    fun cross(a: Vec3, b:Vec3): Vec3 => 
+        (let x1, let y1, let z1) = a
+        (let x2, let y2, let z2) = b
+        ((y1*z2) - (z1*y2), (z1*x2) - (x1*z2), (x1*y2) - (y1*x2))
+
+    fun neg(a: Vec3): Vec3 => (-a._1, -a._2, -a._3)
+
     
     fun squared_norm(a: Vec3): F32 => dot(a, a)
     fun norm(a: Vec3): F32 => squared_norm(a).sqrt()
     fun normalized(a: Vec3): Vec3 => sdiv(a, norm(a)) 
+
+    fun create_coord_system(a: Vec3):CoordSystem => 
+        let b: Vec3 = normalized(if a._1.abs() > a._2.abs() 
+            then (-a._3, 0, a._1) else (0, a._3, -a._1) end)
+        let c: Vec3 = cross(a, b)
+        (a, b, c)
 
 
     

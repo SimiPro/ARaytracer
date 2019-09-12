@@ -5,7 +5,7 @@ use "random"
 
 actor Main
     let world: World = World.create()
-    let rand:Rand = Rand
+    let sampler:Sampler = Sampler
 
     new create(env: Env) =>
         env.out.print("Hello ARaytracer")
@@ -32,8 +32,6 @@ actor Main
                 world.addObj(s2)
 
                 let camera = Camera.create()
-                
-
 
                 while y > 0 do
                     var x: U32 = 0
@@ -42,8 +40,8 @@ actor Main
                         var c: Vec3 = (1.0, 1.0, 1.0)
                         let n_samples: U16 = 32
                         while z < n_samples do
-                            let u: F32 = (x.f32() + rand.real().f32()) / width_x.f32() 
-                            let v: F32 = (y.f32() + rand.real().f32()) / (height_y-1).f32()
+                            let u: F32 = (x.f32() + sampler.rfloat()) / width_x.f32() 
+                            let v: F32 = (y.f32() + sampler.rfloat()) / (height_y-1).f32()
                             let ray = camera.sampleRay(u, v)       
                             var c': Vec3 = trace_ray(ray)
                             c = Linalg.add(c, c')
@@ -71,22 +69,13 @@ actor Main
             env.out.print("Could not open img_out.ppm")
         end
 
-    fun ref rfloat(): F32 => rand.real().f32()
-
-    fun ref rp_in_sphere(): Vec3 => 
-        var p: Vec3 = (0,0,0)
-        repeat
-            p = ((2.0*rfloat()) -1, (2.0*rfloat())-1, (2.0*rfloat())-1)
-        until Linalg.squared_norm(p) < 1 end
-        p
-
 
     fun ref trace_ray(ray: Ray): Vec3 =>
         var c': Vec3 = (1.0, 1.0, 1.0)
         match world.its(ray)
         | let k: Hit => 
-            let target: Vec3 = Linalg.add(Linalg.add(k._2, k._3), rp_in_sphere())
-            return Linalg.smul(0.5, trace_ray( (k._2, Linalg.sub(target, k._2), 0.001, 100)))
+            let target: Vec3 = Linalg.add(Linalg.add(k.p, k.n), sampler.rp_in_sphere())
+            return Linalg.smul(0.5, trace_ray( (k.p, Linalg.sub(target, k.p), 0.001, 100)))
         end
         c'
 
